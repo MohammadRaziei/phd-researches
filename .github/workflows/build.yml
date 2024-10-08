@@ -42,7 +42,7 @@ jobs:
           # latexmk_use_xelatex: true
           # latexmk_shell_escape: true
           # extra_fonts: ./fonts/*.ttf
-          # args: -synctex=1 -interaction=nonstopmode -pdfxe
+          args: -synctex=1 -interaction=nonstopmode -f
           post_compile: echo ">> DONE <<" && cat presentation.log
 
       # - name: Preview files
