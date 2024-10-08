@@ -48,17 +48,17 @@ jobs:
         continue-on-error: true
         with:
           root_file: presentation.tex
-#          latexmk_use_xelatex: true
-#          latexmk_shell_escape: true
+          latexmk_use_xelatex: true
+          latexmk_shell_escape: true
           # extra_fonts: ./fonts/*.ttf
-          compiler: pdflatex
-          args: -synctex=1 -interaction=nonstopmode
+#          compiler: pdflatex
+#          args: -synctex=1 -interaction=nonstopmode
 #          args: -pdf -synctex=1 -interaction=nonstopmode -f -recorder-
           post_compile: echo ">> DONE <<" && cat presentation.log
 
 
       - name: Rename Output
-        run: mv presentation.pdf ${{ steps.branch-names.outputs.current_branch }}.pdf
+        run: mv presentation.pdf ${{ steps.branch-names.outputs.current_branch }}-report.pdf
 
       - name: Upload LOG files
         uses: actions/upload-artifact@v3
@@ -71,7 +71,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: PDF
-          path: ${{ steps.branch-names.outputs.current_branch }}.pdf
+          path: ${{ steps.branch-names.outputs.current_branch }}-report.pdf
           if-no-files-found: error
 
   preview:
