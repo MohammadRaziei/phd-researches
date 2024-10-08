@@ -24,6 +24,9 @@ jobs:
       - name: Set up Git repository
         uses: actions/checkout@v3
 
+      - name: Preview files
+        run: tree --du -shaC .
+
       # - name: Download Fonts
       #   uses: robinraju/release-downloader@v1.8
       #   with:
@@ -45,8 +48,7 @@ jobs:
           args: -synctex=1 -interaction=nonstopmode -f
           post_compile: echo ">> DONE <<" && cat presentation.log
 
-      # - name: Preview files
-        # run: tree --du -shaC .
+
       - name: Rename Output
         run: mv presentation.pdf ${BRANCH_NAME}.pdf
 
