@@ -26,6 +26,9 @@ jobs:
         with:
           lfs: 'true'
 
+      - name: Get branch names.
+        id: branch-names
+        uses: tj-actions/branch-names@v8
 
       - name: Preview files
         run: tree --du -shaC .
@@ -55,7 +58,7 @@ jobs:
 
 
       - name: Rename Output
-        run: mv presentation.pdf ${{ env.BRANCH_NAME }}.pdf
+        run: mv presentation.pdf ${{ steps.branch-names.outputs.current_branch }}.pdf
 
       - name: Upload LOG files
         uses: actions/upload-artifact@v3
@@ -68,7 +71,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: PDF
-          path: ${{ env.BRANCH_NAME }}.pdf
+          path: ${{ steps.branch-names.outputs.current_branch }}.pdf
           if-no-files-found: error
 
   preview:
