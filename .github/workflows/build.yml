@@ -45,7 +45,7 @@ jobs:
         continue-on-error: true
         with:
           root_file: presentation.tex
-          latexmk_use_xelatex: true
+#          latexmk_use_xelatex: true
           latexmk_shell_escape: true
           # extra_fonts: ./fonts/*.ttf
           args: -synctex=1 -interaction=nonstopmode -f
