@@ -48,7 +48,7 @@ jobs:
 #          latexmk_use_xelatex: true
           latexmk_shell_escape: true
           # extra_fonts: ./fonts/*.ttf
-          args: -pdf -synctex=1 -interaction=nonstopmode -f
+          args: -pdf -synctex=1 -interaction=nonstopmode -f -recorder-
           post_compile: echo ">> DONE <<" && cat presentation.log
 
 
