@@ -1,8 +1,7 @@
 # My PHD researches
 
-## Reports
-### fall 2024:
-#### ETSI-III: 
+## Reports:
+#### ETSI-III      (2024 - October)
 Electromagnetic Scattering from Reconfigurable Intelligent Surfaces (RIS) for Advanced Wireless Communications.
 
 [Codes](https://github.com/MohammadRaziei/phd-researches/tree/ETSI-III)
