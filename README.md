@@ -11,3 +11,7 @@ Welcome to the collection of my PhD research projects, where I delve into cuttin
 
 
 This table provides a quick overview of my research progress. For each topic, you can view the full report by clicking the PDF link or explore the code on GitHub to see the technical implementation. Your feedback and contributions are always welcome! 🌱
+
+## Code Reviews:
+To see my code reviews check [this page](https://github.com/MohammadRaziei/phd-researches/tree/github-code-reviews).
+
