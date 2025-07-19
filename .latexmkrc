@@ -1,5 +1,5 @@
-# Use pdflatex
-$pdf_mode = 1;
+$latex = 'xelatex -synctex=1 -interaction=nonstopmode %O %S';
+$pdflatex = $latex;
 
 # Enable continuous preview
 $preview_continuous_mode = 1;
