@@ -46,8 +46,8 @@ jobs:
 
       - name: Download Fonts II-B
         run: |
-          cp "fonts/Iran Sans/IRANSans v5.0/WebFonts/fonts/ttf/*.ttf" fonts
-          rm -rf "fonts/Iran Sans"
+          mv fonts/Iran\ Sans/IRANSans\ v5.0/WebFonts/fonts/ttf/*.ttf fonts
+          rm -rf fonts/Iran\ Sans
 
 
 
