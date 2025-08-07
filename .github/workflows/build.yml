@@ -12,8 +12,6 @@ on:
 permissions:
   contents: write
 
-env:
-    BRANCH_NAME: "${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
 
 jobs:
   build_latex:
@@ -26,52 +24,48 @@ jobs:
         with:
           lfs: 'true'
 
-      - name: Get branch names.
-        id: branch-names
-        uses: tj-actions/branch-names@v8
+      - name: Download Fonts I
+        uses: robinraju/release-downloader@v1.8
+        with:
+          tag: "Latex-lite"
+          # Choose what fonts you need from https://github.com/MohammadRaziei/fonts/releases
+          repository: "mohammadraziei/fonts"
+          fileName: "fonts.zip"
+          out-file-path: "fonts"
+          extract: true
+
+      - name: Download Fonts II
+        uses: robinraju/release-downloader@v1.8
+        with:
+          tag: "fa-pro-archive"
+          # Choose what fonts you need from https://github.com/MohammadRaziei/fonts/releases
+          repository: "mohammadraziei/fonts"
+          fileName: "IranSans.zip"
+          out-file-path: "fonts"
+          extract: true
+
 
       - name: Preview files
         run: tree --du -shaC .
 
-      # - name: Download Fonts
-      #   uses: robinraju/release-downloader@v1.8
-      #   with:
-      #     tag: "Latex-lite"
-      #     # Choose what fonts you need from https://github.com/MohammadRaziei/fonts/releases
-      #     repository: "mohammadraziei/fonts"
-      #     fileName: "fonts.zip"
-      #     out-file-path: "fonts"
-      #     extract: true
 
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@v3
         continue-on-error: true
         with:
-          root_file: presentation.tex
+          root_file: "*.tex"
           latexmk_use_xelatex: true
           latexmk_shell_escape: true
           # extra_fonts: ./fonts/*.ttf
 #          compiler: pdflatex
 #          args: -synctex=1 -interaction=nonstopmode
 #          args: -pdf -synctex=1 -interaction=nonstopmode -f -recorder-
-          post_compile: echo ">> DONE <<" && cat presentation.log
-
-
-      - name: Rename Output
-        run: mv presentation.pdf ${{ steps.branch-names.outputs.current_branch }}-report.pdf
-
-      - name: Upload LOG files
-        uses: actions/upload-artifact@v3
-        with:
-          name: LOG
-          path: |
-            presentation.log
 
       - name: Upload PDF file
         uses: actions/upload-artifact@v3
         with:
           name: PDF
-          path: ${{ steps.branch-names.outputs.current_branch }}-report.pdf
+          path: "*.pdf"
           if-no-files-found: error
 
   preview:

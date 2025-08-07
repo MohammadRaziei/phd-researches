@@ -65,3 +65,4 @@ latexmkrc
 *.synctex(busy)
 
 .idea/
+/*.pdf
