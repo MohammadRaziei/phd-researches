@@ -17,7 +17,7 @@ jobs:
   build_latex:
     runs-on: ubuntu-latest
     if: ${{!startsWith(github.event.head_commit.message, 'skip-build') }}
-
+    timeout-minutes: 20
     steps:
       - name: Set up Git repository
         uses: actions/checkout@v3
@@ -59,19 +59,16 @@ jobs:
         uses: xu-cheng/latex-action@v3
         continue-on-error: true
         with:
-          root_file: "*.tex"
+          root_file: "./*.tex"
           latexmk_use_xelatex: true
           latexmk_shell_escape: true
           extra_fonts: ./fonts/*.ttf
-#          compiler: pdflatex
-#          args: -synctex=1 -interaction=nonstopmode
-#          args: -pdf -synctex=1 -interaction=nonstopmode -f -recorder-
 
       - name: Upload PDF file
         uses: actions/upload-artifact@v4
         with:
           name: PDF
-          path: "*.pdf"
+          path: "./*.pdf"
           if-no-files-found: error
 
   preview:
