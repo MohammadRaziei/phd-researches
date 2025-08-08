@@ -71,35 +71,35 @@ jobs:
           path: "./*.pdf"
           if-no-files-found: error
 
-  preview:
-    name: Preview
+  publish_pdf:
+    name: Publish PDF
     needs: [ build_latex ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
-        with: # download all PDF files
-          name: PDF
-      - name: Preview
-        uses: softprops/action-gh-release@v1
         with:
-          prerelease: true
-          tag_name: "__preview__"
-          files: |
-            *.pdf
-
-
-  release:
-    name: Upload Release Asset
-    needs: [ build_latex ]
-    runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/')
-    steps:
-      - uses: actions/download-artifact@v4
-        with: # download all PDF files
           name: PDF
 
-      - name: Release
-        uses: softprops/action-gh-release@v1
+      - name: Determine release type
+        id: release_type
+        run: |
+          if [[ "${{ github.ref }}" =~ ^refs/tags/v.*$ ]]; then
+            echo "RELEASE_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+            echo "IS_TAG=true" >> $GITHUB_ENV
+          else
+            echo "RELEASE_NAME=__preview__" >> $GITHUB_ENV
+            echo "IS_TAG=false" >> $GITHUB_ENV
+          fi
+        shell: bash # Use bash for all platforms
+
+      - name: Create or update release
+        id: create_release
+        uses: softprops/action-gh-release@v2
         with:
-          files: |
-            *.pdf
+          tag_name: ${{ env.RELEASE_NAME }}
+          name: ${{ env.RELEASE_NAME }}
+          draft: false
+          prerelease: ${{ env.IS_TAG == 'false' }}
+          files: "./*.pdf"
+          token: ${{ secrets.GITHUB_TOKEN }}
+
