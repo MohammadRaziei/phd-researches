@@ -1,0 +1,90 @@
+\documentclass[12pt,a4paper]{book}
+
+\usepackage{amsmath,amssymb,amsthm,amsfonts}
+\usepackage{mathtools}
+\usepackage{bm}
+
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+
+\usepackage{hyperref}
+\usepackage{graphicx}
+
+\usepackage{float}
+
+
+\usepackage{setspace}
+\linespread{1.7}
+
+\usepackage[extrafootnotefeatures]{xepersian}
+\settextfont[Scale=1.1]{XB Niloofar} % در صورت نیاز تغییر بده
+\setlatintextfont{Times New Roman}
+\setmathdigitfont{Yas}
+
+
+\newtheorem{theorem}{قضیه} % ساختار ساده
+\newtheorem{lemma}[theorem]{لم} % شماره‌گذاری وابسته به قضیه
+\newtheorem{definition}{تعریف} % محیطی مستقل با شماره‌گذاری مجزا
+
+
+
+
+
+
+\begin{document}
+	
+	%======================
+	% Title Page
+	%======================
+	\begin{titlepage}
+		\centering
+		
+		\vspace*{2cm}
+		
+		{\Huge \textbf{
+{مقدمه‌ای بر تخمین جهت ورود سیگنال}
+			}
+		}\\[0.8cm]
+		
+		{
+			\Large \lr{Introduction to Direction-of-Arrival Estimation}
+		}
+		
+		\vspace{2cm}
+		
+		{\large نویسندگان:}\\[0.5cm]
+		
+		\lr{Zhizhang Chen\\
+			Gopal Gokeda\\
+			Yiqiang Yu}
+		
+		\vfill
+		
+		{\large مترجمان:}\\[0.5cm]
+		محمد رضیئی فیجانی
+		\\
+	      محمد فخارزاده
+		
+		\vspace{1cm}
+		
+		{\large \today}
+		
+	\end{titlepage}
+	
+	%======================
+	% Table of Contents
+	%======================
+	
+	\include{chapters/forwards}
+		
+	\tableofcontents
+	\newpage
+	
+	
+	\twocolumnfootnotes
+	\include{chapters/chp1-introduction}
+	\include{chapters/chp2-array-systems}
+	\include{chapters/chp3-basics}
+
+	
+\end{document}
