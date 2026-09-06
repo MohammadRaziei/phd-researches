@@ -678,6 +678,386 @@ $\bm{E}_s$ را می‌توان به دو بخش $\bm{E}_1$ و $\bm{E}_2$ مرب
 \end{subequations}
 که در آن ماتریس‌های با مقادیر حقیقی را می‌توان به‌صورت زیر بیان کرد:
 
+که در آن ماتریس‌های با مقادیر حقیقی را می‌توان به‌صورت زیر بیان کرد:
+\begin{subequations}
+	\begin{gather}
+		\bm{\Upsilon}_{\mu} = \bm{T}_A \bm{\Omega}_{\mu} \bm{T}_A^{-1} \in \mathbb{R}^{d \times d} \label{eq:5-64a} \\
+		\bm{\Upsilon}_{\nu} = \bm{T}_A \bm{\Omega}_{\nu} \bm{T}_A^{-1} \in \mathbb{R}^{d \times d} \label{eq:5-64b}
+	\end{gather}
+	\label{eq:5-64}
+\end{subequations}
+ماتریس‌های قطری با مقادیر حقیقی
+\begin{subequations}
+	\begin{gather}
+		\bm{\Omega}_{\mu} = \text{diag} \left\{ \tan \left( \frac{\mu_1}{2} \right), \tan \left( \frac{\mu_2}{2} \right), \dots, \tan \left( \frac{\mu_d}{2} \right) \right\} \label{eq:5-65a} \\
+		\bm{\Omega}_{\nu} = \text{diag} \left\{ \tan \left( \frac{\nu_1}{2} \right), \tan \left( \frac{\nu_2}{2} \right), \dots, \tan \left( \frac{\nu_d}{2} \right) \right\} \label{eq:5-65b}
+	\end{gather}
+	\label{eq:5-65}
+\end{subequations}
+حاوی اطلاعات فرکانس مکانی (\lr{DOA}) مورد نظر هستند.
+
+همانند حالت یک‌بعدی، دو معادله ناورایی با مقادیر حقیقی در \eqref{eq:5-63} را می‌توان به‌طور مستقل با استفاده از \lr{LS} یا \lr{TLS} حل کرد. با این حال، مقادیر ویژه با مقادیر حقیقیِ راه حل‌های $\bm{\Upsilon}_{\mu}$ و $\bm{\Upsilon}_{\nu}$ برای معادلات ناورایی فوق، به‌ترتیب به‌صورت $\tan(\mu_i/2)$ و $\tan(\nu_i/2)$ داده می‌شوند. اگر مقادیر ویژه این ماتریس‌ها به‌طور مستقل محاسبه شوند، جفت کردن دو تخمین متمایز حاصل برای فرکانس‌ها (یعنی جفت کردن زاویه ارتفاع با زاویه سمت متناظر) بسیار دشوار خواهد بود. برای غلبه بر این مشکلِ جفت‌سازی، یک طرح جفت‌سازی خودکار\LTRfootnote{Automatic pairing scheme} در الگوریتم \lr{Unitary ESPRIT} دوبعدی گنجانده شده است \cite{5-9}.
+
+
+
+
+\subsubsection{جفت‌سازی خودکار تخمین‌های فرکانس مکانی}
+\label{subsubsec:5-5-2-4}
+ماتریس‌های با مقادیر حقیقی $\bm{\Upsilon}_{\mu}$ و $\bm{\Upsilon}_{\nu}$ مجموعه‌ی بردارهای ویژه‌ی یکسانی را به اشتراک می‌گذارند. انتخاب یک ماتریس بردار ویژه‌ی حقیقی $\bm{T}$ به‌گونه‌ای که $\bm{\Upsilon}_{\mu} = \bm{T} \bm{\Omega}_{\mu} \bm{T}^{-1}$ و $\bm{\Upsilon}_{\nu} = \bm{T} \bm{\Omega}_{\nu} \bm{T}^{-1}$ حقیقی باشند، امکان‌پذیر است. با این حال، به دلیل نویز جمع‌شونده و تعداد محدود اسنپ‌شات‌ها ($N$)، ماتریس‌های حقیقی $\bm{\Upsilon}_{\mu}$ و $\bm{\Upsilon}_{\nu}$ دقیقاً مجموعه‌ی بردارهای ویژه‌ی یکسانی ندارند. در نتیجه، به‌دست آوردن بردارهای ویژه تنها از یکی از ماتریس‌ها منجر به تخمین‌های اشتباه خواهد شد؛ زیرا این یک انتخاب تصادفی بوده و از اطلاعات موجود در ماتریس دیگر استفاده نمی‌شود. همچنین، $\bm{\Upsilon}_{\mu}$ و $\bm{\Upsilon}_{\nu}$ ممکن است دارای مقادیر ویژه‌ی چندگانه (تباهیده\LTRfootnote{Degenerate}) باشند، اگرچه مجموعه‌ی بردارهای ویژه‌ی مشترکی داشته باشند.
+
+این مشکل در الگوریتم \lr{Unitary ESPRIT} دوبعدی با «ساخت یک ماتریس مختلط» $\bm{\Upsilon}_{\mu} + j \bm{\Upsilon}_{\nu}$ حل می‌شود \cite{5-9}. جفت‌سازی خودکار تخمین‌های فرکانس مکانی $\mu_i$ و $\nu_i$ را می‌توان با محاسبه‌ی مقادیر ویژه‌ی این ماتریس به‌دست آورد:
+\begin{equation}
+	\bm{\Upsilon}_{\mu} + j \bm{\Upsilon}_{\nu} = \bm{T} (\bm{\Omega}_{\mu} + j \bm{\Omega}_{\nu}) \bm{T}^{-1}
+	\label{eq:5-66}
+\end{equation}
+
+بنابراین، تخمین‌های جفت‌شده‌ی خودکار $\mu$ و $\nu$ از بخش‌های حقیقی و موهومی مقادیر ویژه‌ی مختلط $\bm{\Omega}_{\mu} + j \bm{\Omega}_{\nu}$ حاصل می‌شوند. از نظر ریاضی:
+\begin{equation}
+	\bm{\Omega}_{\mu} + j \bm{\Omega}_{\nu} = \bm{T} \bm{\Lambda} \bm{T}^{-1} \quad \text{با} \quad \bm{\Lambda} = \text{diag}\{\lambda_1, \lambda_2, \dots, \lambda_d\}
+	\label{eq:5-67}
+\end{equation}
+به‌طوری که:
+\begin{subequations}
+	\begin{gather}
+		\mu_i = 2 \arctan(\text{Re}\{\lambda_i\}), \quad 1 \leq i \leq d \label{eq:5-68a} \\
+		\nu_i = 2 \arctan(\text{Im}\{\lambda_i\}), \quad 1 \leq i \leq d \label{eq:5-68b}
+	\end{gather}
+	\label{eq:5-68}
+\end{subequations}
+
+خلاصه‌ای از محاسبات الگوریتم \lr{Unitary ESPRIT} دوبعدی در جدول \ref{tab:5-3} ارائه شده است \cite{5-1}.
+
+
+\begin{table}[ht]
+	\centering
+	\caption{خلاصه‌ی الگوریتم \lr{Unitary ESPRIT} دوبعدی در فضای عنصر.}
+	\label{tab:5-3}
+	\begin{tabular}{|p{0.95\textwidth}|}
+		\hline
+		\begin{enumerate}
+			\item \textbf{تخمین زیرفضای سیگنال با مقادیر حقیقی:} محاسبه‌ی $\bm{E}_s$ به‌عنوان $d$ بردار منفرد چپِ غالب از $\bm{\Gamma}_s(\bm{X})$ (رویکرد ریشه دوم) یا به‌عنوان $d$ بردار ویژه‌ی غالب از $\bm{\Gamma}_s(\bm{X})\bm{\Gamma}_s(\bm{X})^H$ (رویکرد کوواریانس).
+			
+			\item \textbf{معادله‌ی ناورایی با مقادیر حقیقی:} حل این معادلات برای $\bm{\Upsilon}_{\mu}$ و $\bm{\Upsilon}_{\nu}$:
+			\begin{equation*}
+				\bm{K}_{\mu 1} \bm{E}_s \bm{\Upsilon}_{\mu} \approx \bm{K}_{\mu 2} \bm{E}_s \quad \text{و} \quad \bm{K}_{\nu 1} \bm{E}_s \bm{\Upsilon}_{\nu} \approx \bm{K}_{\nu 2} \bm{E}_s
+			\end{equation*}
+			با استفاده از روش‌های \lr{LS} یا \lr{TLS}.
+			
+			\item \textbf{تخمین \lr{DOA}:} محاسبه‌ی مقادیر ویژه‌ی ماتریس $d \times d$ با مقادیر مختلط:
+			\begin{equation*}
+				\bm{\Omega}_{\mu} + j \bm{\Omega}_{\nu} = \bm{T} \bm{\Lambda} \bm{T}^{-1} \quad \text{با} \quad \bm{\Lambda} = \text{diag}\{\lambda_i\}_{i=1}^d
+			\end{equation*}
+			و سپس استخراج اطلاعات زاویه‌ای \lr{DOA} از طریق:
+			\begin{equation*}
+				\begin{aligned}
+							\mu_i &= 2 \arctan(\text{Re}\{\lambda_i\}), \quad 1 \leq i \leq d \\
+					\nu_i &= 2 \arctan(\text{Im}\{\lambda_i\}), \quad 1 \leq i \leq d \\
+					\phi_i &= \arg(u_i + jv_i) \quad \text{و} \quad \theta_i = \arcsin(\|u_i + jv_i\|)
+				\end{aligned}
+			\end{equation*}
+		\end{enumerate} \\
+		\hline
+	\end{tabular}
+\end{table}
+
+
+
+
+
+
+
+
+
+
+\section{تبدیل فضای پرتو}
+\label{sec:5-6}
+بهبود عملکرد الگوریتم‌های تخمین \lr{DOA} معمولاً مستلزم استفاده از آرایه‌های آنتنی با تعداد عناصر زیاد است. از آنجا که نیازمندی‌های محاسباتی مستقیماً با ابعاد داده‌های جمع‌آوری‌شده در ارتباط است، بار محاسباتی با افزایش تعداد عناصر به‌سرعت افزایش می‌یابد. الگوریتم \lr{ESPRIT} که تا اینجا توصیف شد، مستلزم آن است که داده‌های دریافت شده توسط تمامی عناصر آرایه به فرم دیجیتال در دسترس باشند. در بسیاری از کاربردها، مانند رادار، استفاده از آرایه‌هایی با ۱۰ عنصر یا بیشتر غیرمعمول نیست. این امر نیازمند تعداد زیادی جبهه‌ی سخت‌افزاری\LTRfootnote{Front-ends} و مبدل‌های آنالوگ به دیجیتال\LTRfootnote{A/D converters} است که ممکن است با توجه به پردازش فضای عنصر\LTRfootnote{Element space} بسیار هزینه‌بر باشد \cite{5-10, 5-11}. در این بخش، تکنیکی به نام پردازش فضای پرتو\LTRfootnote{Beamspace processing} را برای کاهش ابعاد بردار مشاهده توصیف می‌کنیم. الگوریتم‌هایی که در فضای پرتو عمل می‌کنند، ابتدا داده‌های دریافتی (در فضای عنصر) را به زیرفضایی با ابعاد کمتر، یعنی فضای پرتو، تصویر می‌کنند. سپس داده‌های فضای پرتو در این فضای کم‌بعد پردازش می‌شوند که منجر به کاهش پیچیدگی محاسباتی می‌گردد.
+
+یک \lr{ULA} با $M$ عنصر و $N$ اسنپ‌شات از داده‌ها را در نظر بگیرید. اگر $\bm{x}(t)$ ماتریس داده‌های اسنپ‌شات در فضای عنصر با ابعاد $M \times N$ باشد، در این صورت یک اسنپ‌شات در فضای پرتو با ابعاد کاهش‌یافته به‌صورت $\bm{y}(t)$ با اندازه $L \times N$ (که در آن $L < M$ است)، از طریق یک تبدیل خطی به فرم زیر به‌دست می‌آید:
+\begin{equation*}
+	\bm{y}(t) = \bm{W}_b \bm{x}(t)
+\end{equation*}
+
+بردار مشاهده با ابعاد کاهش‌یافته $\bm{y}(t)$ معمولاً به‌عنوان داده‌های فضای پرتو و $\bm{W}_b$ به‌عنوان ماتریس تبدیل فضای پرتو با ابعاد $L \times M$ شناخته می‌شود. در مورد آرایه‌های خطی یکنواخت، الگوریتم‌های تبدیل فوریه سریع مانند \lr{DFT} برای تبدیل فضای پرتو استفاده می‌شوند. طبیعتاً پردازش داده‌های فضای پرتو، علی‌رغم کاهش بارهای محاسباتی، به معنای از دست رفتن بخشی از اطلاعات نیز هست. تبدیل فضای پرتو را می‌توان به‌عنوان یک شکل‌دهنده پرتو\LTRfootnote{Beamformer} چندکاناله در نظر گرفت. با طراحی شکل‌دهنده‌های پرتو (سطرهای ماتریس $\bm{W}_b$)، بر یک قطاع \lr{DOA} نسبتاً باریک تمرکز می‌شود، به‌طوری که اطلاعات ضروری موجود در $\bm{x}(t)$ در رابطه با سیگنال‌های ورودی، در $\bm{y}(t)$ حفظ گردد. بنابراین، پردازش فضای پرتو زمانی بهترین کاربرد را دارد که آگاهی قبلی\LTRfootnote{A priori information} از مکان‌های زاویه‌ای کلی سیگنال‌های ورودی وجود داشته باشد (مانند کاربردهای راداری). در این تکنیک، پیش از به‌کارگیری هرگونه الگوریتم پردازش \lr{DOA} سیگنال، از نوعی نگاشت که ابعاد مجموعه داده را کاهش می‌دهد، استفاده می‌شود. مزیت دیگر این است که اگر این نگاشتِ تبدیلی در سخت‌افزار آنالوگ پیاده‌سازی شود، در مقایسه با پیاده‌سازی در فضای عنصر، به تعداد کمتری مبدل آنالوگ به دیجیتال نیاز خواهد بود. تصویری از پردازش فضای پرتو در شکل \ref{fig:5-4-a} نشان داده شده است که در آن پردازش فضای پرتو دارای قطاع \lr{DOA} محدود شده است، در حالی که شکل \ref{fig:5-4-b} تخمین \lr{DOA} در فضای عنصر کلی را نشان می‌دهد.
+
+\begin{figure}[ht]
+	\centering
+	\subfigure[پردازش فضای پرتو]{
+		\includegraphics[width=0.45\textwidth]{chapters/figs/fig-5-4-a}
+		\label{fig:5-4-a}
+	}
+	\hfill
+	\subfigure[پردازش فضای عنصر]{
+		\includegraphics[width=0.45\textwidth]{chapters/figs/fig-5-4-b}
+		\label{fig:5-4-b}
+	}
+	\caption{\subref{fig:5-4-a} پردازش فضای پرتو و \subref{fig:5-4-b} پردازش فضای عنصر.}
+	\label{fig:5-4}
+\end{figure}
+
+
+
+الگوریتم‌های مبتنی بر \lr{ESPRIT} مستلزم ساختار خاصی از آرایه هستند که دارای ناورایی جابجایی\LTRfootnote{Shift invariance} باشد. در بخش زیر توضیح داده می‌شود که این ساختار چگونه برقرار می‌گردد.
+
+\subsubsection{ساختار ناورایی فضای پرتو \lr{DFT}}
+\label{subsubsec:5-6-1}
+در این بخش، ساختار ناورایی داده‌های فضای پرتو نشان داده می‌شود. برای اثبات این موضوع، ماتریس هدایت آرایه در فضای عنصر در نظر گرفته می‌شود. در مورد یک \lr{ULA}، تبدیل از فضای عنصر به فضای پرتو از طریق پیش‌ضرب داده‌های فضای عنصر در آن سطرهایی از ماتریس \lr{DFT}\LTRfootnote{Discrete Fourier Transform (DFT)} انجام می‌شود که پرتوهایی شامل قطاع\LTRfootnote{Sector} \lr{DOA} مورد نظر را تشکیل می‌دهند. این کار با بهره‌گیری از این واقعیت انجام می‌شود که هر سطر از ماتریس \lr{DFT}، پرتویی به سمت یک زاویه مشخص تشکیل می‌دهد.
+
+یک \lr{ULA} با بیشترین هم‌پوشانی را در نظر بگیرید. مدل سیگنال و داده‌ی فصل \ref{chap:3} را فرض کرده و تصور کنید مرکز \lr{ULA} به‌عنوان مرکز مرجع فاز\LTRfootnote{Phase reference center} انتخاب شده است. ماتریس هدایت آرایه در فضای عنصر، $\bm{A}_c$، برای این آرایه مطابق بحث فصل \ref{chap:3} توسط رابطه \eqref{eq:3-23} داده می‌شود. ستون‌های $\bm{A}_c$ در اینجا برای دسترسی سریع دوباره آورده شده‌اند:
+\begin{equation}
+	\bm{a}_c(\mu_i) = e^{-j\left(\frac{M-1}{2}\right)\mu_i} [1, e^{j\mu_i}, e^{j2\mu_i}, \dots, e^{j(M-1)\mu_i}]^T, \quad 1 \leq i \leq d
+	\label{eq:5-69}
+\end{equation}
+
+ابتدا فرض کنید تمام $M$ پرتوی \lr{DFT} در حال استفاده هستند؛ یعنی فضای پرتو معادل با فضای عنصر قرار داده شده است. به عبارت دیگر، یک ماتریس \lr{DFT} $M$-نقطه‌ای مقیاس‌شده، $\bm{W}^b \in \mathbb{C}^{M \times M}$، اعمال می‌شود. هر سطر از این ماتریس \lr{DFT}، یعنی $\bm{W}^b$، نشان‌دهنده یک بردار وزن شکل‌دهی پرتو\LTRfootnote{Beamforming weight vector} است که برای هدایت آرایه به سمت جهت $(k-1) \cdot 2\pi/M$ برای $1 \leq k \leq M$ مورد نیاز است؛ این بردار را می‌توان به‌صورت زیر بیان کرد:
+\begin{align}
+	\bm{w}_k^b &= e^{j\left(\frac{M-1}{2}\right)(k-1)\frac{2\pi}{M}} [1, e^{-j(k-1)\frac{2\pi}{M}}, e^{-j2(k-1)\frac{2\pi}{M}}, \dots, e^{-j(M-1)(k-1)\frac{2\pi}{M}}] \nonumber \\
+	&= e^{j\left(\frac{M-1}{2}\right)\gamma_k} [1, e^{-j\gamma_k}, e^{-j2\gamma_k}, \dots, e^{-j(M-1)\gamma_k}], \quad 1 \leq k \leq M
+	\label{eq:5-70}
+\end{align}
+که در آن $\gamma_k = (k-1) \cdot 2\pi/M$ برای $1 \leq k \leq M$ است. بردار سطری $\bm{w}_k^b$ در فضای پرتو نشان‌دهنده یک پرتوی \lr{DFT} است که در فرکانس مکانی $\gamma_k$ هدایت شده است.
+
+اکنون، ماتریس هدایت در فضای پرتو \lr{DFT}، یعنی $\bm{B}$، از روی ماتریس هدایت در فضای عنصر $\bm{A}_c$ به‌صورت زیر به‌دست می‌آید:
+\begin{equation}
+	\bm{B} = \bm{W}^b \bm{A}_c = [\bm{b}(\mu_1), \bm{b}(\mu_2), \dots, \bm{b}(\mu_d)] \in \mathbb{R}^{M \times d}
+	\label{eq:5-71}
+\end{equation}
+
+
+
+\begin{equation}
+	\bm{b}(\mu_i) = [b_1(\mu_i), b_2(\mu_i), \dots, b_M(\mu_i)]^T, \quad 1 \le i \le d
+	\label{eq:5-72}
+\end{equation}
+که در آن $\bm{b}(\mu_i)$ برای $1 \le i \le d$ نشان‌دهنده یک بردار هدایت در فضای پرتو\LTRfootnote{Beamspace} \lr{DFT} است. این ماتریسِ تبدیل‌یافته به فضای پرتو \lr{DFT} دارای مقادیر حقیقی است، زیرا ماتریس تبدیل $\bm{W}^b$ یک ماتریس حقیقی-چپ-$\Pi$ است.
+
+رابطه بین دو مؤلفه مجاور در فضای پرتو در ادامه استخراج شده است که به کسب دیدگاهی\LTRfootnote{Insight} در مورد چگونگی تمرکز بر یک قطاع\LTRfootnote{Sector} خاص کمک می‌کند \cite{5-12}. مؤلفه $k$-ام از بردار هدایت فضای پرتو \lr{DFT} با مقادیر حقیقی را در نظر بگیرید:
+\begin{align}
+	b_k(\mu_i) &= \bm{w}_k^b \bm{a}_c(\mu_i) \nonumber \\
+	&= e^{j\left(\frac{M-1}{2}\right)\gamma_k} e^{-j\left(\frac{M-1}{2}\right)\mu_i} \sum_{l=1}^{M} e^{-j(l-1)(\mu_i - \gamma_k)} \nonumber \\
+	&= e^{j\left(\frac{M-1}{2}\right)(\gamma_k - \mu_i)} \sum_{l=0}^{M-1} e^{-jl(\mu_i - \gamma_k)} \label{eq:5-73} \\
+	&= \frac{e^{-j\frac{M}{2}(\mu_i - \gamma_k)}}{e^{-j\frac{1}{2}(\mu_i - \gamma_k)}} \cdot \frac{1 - e^{jM(\mu_i - \gamma_k)}}{1 - e^{j(\mu_i - \gamma_k)}} \nonumber \\
+	&= \frac{e^{-j\frac{M}{2}(\mu_i - \gamma_k)} - e^{j\frac{M}{2}(\mu_i - \gamma_k)}}{e^{-j\frac{1}{2}(\mu_i - \gamma_k)} - e^{j\frac{1}{2}(\mu_i - \gamma_k)}} = \frac{\sin\left(\frac{M}{2}(\mu_i - \gamma_k)\right)}{\sin\left(\frac{1}{2}(\mu_i - \gamma_k)\right)} \nonumber
+\end{align}
+که در آن از مجموع سری هندسی متناهی\LTRfootnote{Finite geometric series} $\sum_{l=0}^{n} a^l = \frac{1 - a^{n+1}}{1 - a}$ استفاده شده است.
+
+یک مؤلفه مجاور با $b_k(\mu_i)$ را در نظر بگیرید. از رابطه \eqref{eq:5-73} داریم:
+\begin{equation}
+	b_{k+1}(\mu_i) = \frac{\sin\left(\frac{M}{2}(\mu_i - \gamma_{k+1})\right)}{\sin\left(\frac{1}{2}(\mu_i - \gamma_{k+1})\right)} = \frac{\sin\left(\frac{M}{2}\left(\mu_i - (k+1)\frac{2\pi}{M}\right)\right)}{\sin\left(\frac{1}{2}\left(\mu_i - (k+1)\frac{2\pi}{M}\right)\right)}
+	\label{eq:5-74}
+\end{equation}
+
+
+
+
+
+با مقایسه \eqref{eq:5-74} با \eqref{eq:5-73}، به‌راحتی می‌توان مشاهده کرد که صورت $b_{k+1}(\mu_i)$ در رابطه \eqref{eq:5-74} قرینه (منفیِ) صورت $b_k(\mu_i)$ است، زیرا:
+\begin{align*}
+	\sin \left( \frac{M}{2} \left( \mu_i - k \frac{2\pi}{M} \right) \right) &= \sin \left( \frac{M}{2} \left( \mu_i - (k-1) \frac{2\pi}{M} \right) - \pi \right) \\
+	&= -\sin \left( \frac{M}{2} (\mu_i - \gamma_k) \right)
+\end{align*}
+از این رو، هر دو مؤلفه متوالی از بردار هدایت فضای پرتو\LTRfootnote{Beamspace steering vector} $\bm{b}(\mu_i)$ به‌صورت زیر با هم مرتبط هستند:
+\begin{equation*}
+	\sin \left( \frac{1}{2} (\mu_i - \gamma_k) \right) b_k(\mu_i) = -\sin \left( \frac{1}{2} (\mu_i - \gamma_{k+1}) \right) b_{k+1}(\mu_i)
+\end{equation*}
+با استفاده از اتحاد مثلثاتی $\sin(a - b) = \sin(a)\cos(b) - \cos(a)\sin(b)$، داریم:
+\begin{equation}
+	\begin{aligned}
+		&\left\{ \sin \left( \frac{\mu_i}{2} \right) \cos \left( \frac{\gamma_k}{2} \right) - \cos \left( \frac{\mu_i}{2} \right) \sin \left( \frac{\gamma_k}{2} \right) \right\} b_k(\mu_i) \\
+		&= - \left\{ \sin \left( \frac{\mu_i}{2} \right) \cos \left( \frac{\gamma_{k+1}}{2} \right) - \cos \left( \frac{\mu_i}{2} \right) \sin \left( \frac{\gamma_{k+1}}{2} \right) \right\} b_{k+1}(\mu_i)
+	\end{aligned}
+	\label{eq:5-75}
+\end{equation}
+با توجه به $\gamma_k = (k-1) \cdot \frac{2\pi}{M}$، در نتیجه خواهیم داشت:
+\begin{equation}
+	\begin{aligned}
+		&\tan \left( \frac{\mu_i}{2} \right) \left\{ \cos \left( (k-1) \frac{\pi}{M} \right) b_k(\mu_i) + \cos \left( k \frac{\pi}{M} \right) b_{k+1}(\mu_i) \right\} \\
+		&= \sin \left( (k-1) \frac{\pi}{M} \right) b_k(\mu_i) + \sin \left( k \frac{\pi}{M} \right) b_{k+1}(\mu_i)
+	\end{aligned}
+	\label{eq:5-76}
+\end{equation}
+برای $1 \le k \le M$ و $1 \le i \le d$. این رابطه بین هر دو مؤلفه متوالی از بردار هدایت فضای پرتو برقرار است.
+
+
+علاوه بر این، می‌توان مشاهده کرد که مؤلفه‌های اول و آخر، یعنی پرتوهای با شاخص‌های $k = M$ و $k = 1$، به‌لحاظ فیزیکی مجاور یکدیگر هستند؛ زیرا آن‌ها به‌ترتیب در فرکانس‌های مکانی $\gamma_M - 2\pi = (M-1) \frac{2\pi}{M} - 2\pi = -\frac{2\pi}{M}$ و $\gamma_0 = 0$ هدایت شده‌اند. این موضوع در شکل \ref{fig:5-5} ترسیم شده است. این مشاهده برای استخراج یک رابطه ناورایی برای بردارهای هدایت فضای پرتو \lr{DFT}، یعنی $\bm{b}(\mu_i)$، که برای پیاده‌سازی \lr{ESPRIT} ضروری است، به کار می‌رود.
+
+
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=0.7\textwidth]{chapters/figs/fig-5-5}
+	\caption{جهت‌های لوب‌های اصلی $|b_1(\mu)|, |b_2(\mu)|, \dots, |b_M(\mu)|$ مربوط به یک \lr{ULA}.}
+	\label{fig:5-5}
+\end{figure}
+
+همچنین رابطه زیر برقرار است:
+\begin{align}
+	b_{M+1}(\mu_i) &= \frac{\sin \left( \frac{M}{2} \left( \mu_i - M \frac{2\pi}{M} \right) \right)}{\sin \left( \frac{1}{2} \left( \mu_i - M \frac{2\pi}{M} \right) \right)} \nonumber \\
+	&= \frac{\sin \left( \frac{M}{2} \mu_i - M\pi \right)}{\sin \left( \frac{1}{2} \mu_i - \pi \right)} = \frac{(-1)^M \cdot \sin \left( \frac{M}{2} \mu_i \right)}{-\sin \left( \frac{1}{2} \mu_i \right)}
+	\label{eq:5-77}
+\end{align}
+
+با جایگذاری $k = M$ در رابطه \eqref{eq:5-76}، رابطه زیر بین $b_M(\mu_i)$ و $b_1(\mu_i)$ به‌دست می‌آید:
+\begin{equation}
+	\begin{aligned}
+		&\tan \left( \frac{\mu_i}{2} \right) \left\{ \cos \left( (M-1) \frac{\pi}{M} \right) b_M(\mu_i) + \cos(\pi) (-1)^{M-1} b_1(\mu_i) \right\} \\
+		&= \sin \left( (M-1) \frac{\pi}{M} \right) b_M(\mu_i) + \sin(\pi) (-1)^{M-1} b_1(\mu_i), \quad 1 \leq i \leq d
+	\end{aligned}
+	\label{eq:5-78}
+\end{equation}
+
+تجمیع تمام $M$ معادله در قالب برداری برای $1 \le k \le M$ منجر به یک رابطه ناورایی برای بردارهای هدایت فضای پرتو \lr{DFT} یعنی $\bm{b}(\mu_i)$ می‌شود؛ این رابطه مشابه رابطه ناورایی برقرار برای $\bm{d}(\mu_i)$ در \eqref{eq:5-42} است.
+
+
+
+
+\begin{equation}
+	\bm{\Gamma}_1 \bm{b}(\mu_i) \cdot \tan\left(\frac{\mu_i}{2}\right) = \bm{\Gamma}_2 \bm{b}(\mu_i), \quad 1 \leq i \leq d
+	\label{eq:5-79}
+\end{equation}
+
+ماتریس‌های انتخاب $\bm{\Gamma}_1$ و $\bm{\Gamma}_2$ با ابعاد $M \times M$ به‌صورت زیر تعریف می‌شوند:
+
+\begin{equation*}
+	\bm{\Gamma}_1 = \begin{bmatrix}
+		1 & \cos\left(\frac{\pi}{M}\right) & 0 & 0 & \dots & 0 & 0 \\
+		0 & \cos\left(\frac{\pi}{M}\right) & \cos\left(\frac{2\pi}{M}\right) & 0 & \dots & 0 & 0 \\
+		0 & 0 & \cos\left(\frac{2\pi}{M}\right) & \cos\left(\frac{3\pi}{M}\right) & \dots & 0 & 0 \\
+		\vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\
+		0 & 0 & 0 & 0 & \dots & \cos\left((M-2)\frac{\pi}{M}\right) & \cos\left((M-1)\frac{\pi}{M}\right) \\
+		(-1)^M & 0 & 0 & 0 & \dots & 0 & \cos\left((M-1)\frac{\pi}{M}\right)
+	\end{bmatrix}
+\end{equation*}
+
+\begin{equation*}
+	\bm{\Gamma}_2 = \begin{bmatrix}
+		0 & \sin\left(\frac{\pi}{M}\right) & 0 & 0 & \dots & 0 & 0 \\
+		0 & \sin\left(\frac{\pi}{M}\right) & \sin\left(\frac{2\pi}{M}\right) & 0 & \dots & 0 & 0 \\
+		0 & 0 & \sin\left(\frac{2\pi}{M}\right) & \sin\left(\frac{3\pi}{M}\right) & \dots & 0 & 0 \\
+		\vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\
+		0 & 0 & 0 & 0 & \dots & \sin\left((M-2)\frac{\pi}{M}\right) & \sin\left((M-1)\frac{\pi}{M}\right) \\
+		0 & 0 & 0 & 0 & \dots & 0 & \sin\left((M-1)\frac{\pi}{M}\right)
+	\end{bmatrix}
+\end{equation*}
+
+
+
+مشاهده می‌شود که سطرهای آخر $\bm{\Gamma}_1$ و $\bm{\Gamma}_2$ ترکیب‌های خطی\LTRfootnote{Linear combinations} سایر سطرها هستند، به این معنی که هر دو ماتریس انتخاب $M \times N$ دچار نقص رتبه\LTRfootnote{Rank-deficient} هستند. رتبه‌ی آن‌ها تنها $(M - 1)$ است. بنابراین، در صورتی که تمامی $M$ پرتوی \lr{DFT} به کار گرفته شوند، یکی از $M$ سطر $\bm{\Gamma}_1$ و $\bm{\Gamma}_2$ باید حذف گردد. با این حال، در پردازش با ابعاد کاهش‌یافته\LTRfootnote{Reduced dimension processing}، تنها زیرمجموعه‌ای از بردارهای سطری که قطاع \lr{DOA} مورد نظر را پوشش می‌دهند، بر ماتریس داده‌ی $\bm{X}$ اعمال می‌شوند. در این حالت، تنها آن زیربلاک‌هایی از ماتریس‌های انتخاب $\bm{\Gamma}_1$ و $\bm{\Gamma}_2$ که مؤلفه‌های متناظر $\bm{b}(\mu_i)$ را به هم مرتبط می‌کنند، استفاده خواهند شد. با وجود $d$ سیگنال تابیده، ماتریس هدایت فضای پرتو \lr{DFT} با مقادیر حقیقی $\bm{B}$ در یک ویژگی ناورایی جابجایی صدق می‌کند که به‌صورت زیر بیان می‌شود:
+\begin{equation*}
+	\bm{\Gamma}_1 \bm{B} \bm{\Omega} = \bm{\Gamma}_2 \bm{B}
+\end{equation*}
+که در آن:
+\begin{equation}
+	\bm{\Omega} = \text{diag} \left\{ \tan \left( \frac{\mu_1}{2} \right), \tan \left( \frac{\mu_2}{2} \right), \dots, \tan \left( \frac{\mu_d}{2} \right) \right\}
+	\label{eq:5-80}
+\end{equation}
+
+بنابراین مشاهده می‌شود که ماتریس هدایت آرایه در فضای پرتو $\bm{B}$ در یک ویژگی ناورایی جابجایی مشابه با ماتریس هدایت آرایه در فضای عنصر (ارائه شده در رابطه \eqref{eq:5-44}) صدق می‌کند و در نتیجه پیاده‌سازی الگوریتم‌های مبتنی بر \lr{ESPRIT} را میسر می‌سازد.
+
+
+\subsubsection{فضای پرتو \lr{DFT} در ابعاد کاهش‌یافته}
+\label{subsubsec:5-6-2}
+در بخش قبلی، ماتریس تبدیل فضای پرتو به‌صورت $\bm{W}_b$ در نظر گرفته شد. در نتیجه، هر بردار هدایت فضای پرتو $\bm{b}(\mu_i)$ دارای $M$ مؤلفه است. اگر آگاهی قبلی\LTRfootnote{A priori knowledge} از زاویه (زوایای) سیگنال(های) تابیده وجود داشته باشد، امکان انتخاب تنها آن مؤلفه‌هایی که قطاع\LTRfootnote{Sector} \lr{DOA} مطلوب را در اطراف آن زاویه (زوایا) پوشش می‌دهند وجود دارد \cite{5-8}؛ چرا که هر سطر از معادله ماتریسی \eqref{eq:5-80} دو مؤلفه‌ی متوالی از بردارهای هدایت فضای پرتو \lr{DFT} یعنی $\bm{b}(\mu_i)$ را به هم مرتبط می‌کند.
+
+این مشاهده به ما اجازه می‌دهد تا به‌جای تمام $M$ سطر، تعداد $L \le M$ سطر متوالی از $\bm{W}_b$ را که از سطر $k_{\min}$ (با شرط $1 \le k_{\min} \le M$) شروع می‌شوند، بر ماتریس داده‌ی $\bm{X}$ اعمال کنیم. در حالت تعداد سطرهای کاهش‌یافته، ماتریس شکل‌دهی پرتو حاصل را که $L$ پرتوی متوالی تولید می‌کند، با $\bm{W}_b^L \in \mathbb{C}^{L \times M}$ نشان می‌دهیم. بدین ترتیب، شکل‌دهنده پرتو $\bm{W}_b^L$ دامنه جستجو برای \lr{DOA}ها را به قطاع مکانی مشخص‌شده توسط رابطه زیر محدود می‌کند:
+\begin{equation}
+	(k_{\min} - 1) \frac{2\pi}{M} \leq \gamma \leq (k_{\min} + L - 2) \frac{2\pi}{M}
+	\label{eq:5-81}
+\end{equation}
+که در آن، زاویه هدایت $\gamma > \pi$ با زاویه هدایت $\gamma - 2\pi$ یکسان است.
+
+تعداد سطرها ($L$) به پهنای زاویه‌ایِ قطاع \lr{DOA} مورد نظر بستگی دارد و می‌تواند به‌طور قابل توجهی کمتر از تعداد عناصر $M$ باشد. در نتیجه، بعدِ \lr{SVD} در رابطه \eqref{eq:5-71} و متعاقباً $\bm{E}_s$ به همراه معادله ناورایی با مقادیر حقیقی به $L \times d$ کاهش می‌یابد. با انتخاب زیربلاک‌های مناسب از $\bm{\Gamma}_1$ و $\bm{\Gamma}_2$، پردازش فضای پرتو مشابه فضای عنصر عمل می‌کند، با این تفاوت که ابعاد آن کاهش یافته است. ماتریس‌های انتخاب حاصل با ابعاد $(L - 1) \times L$ را $\bm{\Gamma}_1^{(L)}$ و $\bm{\Gamma}_2^{(L)}$ می‌نامیم، به‌طوری که بردارهای هدایت فضای پرتو \lr{DFT} با ابعاد $L$ (یعنی $\bm{b}_L(\mu_i) = \bm{W}_b^L \bm{a}_c(\mu_i)$) همچنان در رابطه ناورایی صدق کنند.
+
+
+
+\begin{equation}
+	\bm{\Gamma}_1^{(B)} \bm{b}_L(\mu_i) \cdot \tan\left(\frac{\mu_i}{2}\right) = \bm{\Gamma}_2^{(B)} \bm{b}_L(\mu_i), \quad 1 \le i \le d
+	\label{eq:5-82}
+\end{equation}
+
+الگوهای پرتو\LTRfootnote{Beam patterns} یک \lr{ULA} با $M = 8$ حسگر محاسبه شد. یک تبدیل فضای پرتو \lr{DFT} به‌صورت $\bm{W}_8^h$ برای تشکیل $L = 3$ پرتو به کار گرفته شد. هنگامی که سطرهای ۴، ۵ و ۶ برای تشکیل پرتوها استفاده شدند، الگوهای پرتو متناظر $b_4(\mu_i)$، $b_5(\mu_i)$ و $b_6(\mu_i)$ مطابق شکل \ref{fig:5-6-a} حاصل شدند. محاسبات دیگری برای تأیید اینکه مؤلفه‌های اول و آخر به‌لحاظ فیزیکی مجاور یکدیگر هستند، انجام شد. سطرهای ۱، ۲ و ۸ از $\bm{W}_8^h$ برای تشکیل $L = 3$ پرتو به کار رفتند. الگوهای پرتو متناظر همان‌طور که در شکل \ref{fig:5-6-b} نشان داده شده است، مجاور هم هستند. با بهره‌گیری از این بینش‌ها، بخش‌های بعدی نحوه عملکرد \lr{Unitary ESPRIT} در فضای پرتو \lr{DFT} را توضیح می‌دهند.
+
+
+\begin{figure}[ht]
+	\centering
+	\subfigure[]{
+		\includegraphics[width=0.48\textwidth]{chapters/figs/fig-5-6-a}
+		\label{fig:5-6-a}
+	}
+	\hfill
+	\subfigure[]{
+		\includegraphics[width=0.48\textwidth]{chapters/figs/fig-5-6-b}
+		\label{fig:5-6-b}
+	}
+	\caption{الگوی پرتو یک آرایه خطی یکنواخت هشت‌عنصری.}
+	\label{fig:5-6}
+\end{figure}
+
+
+
+\section{\lr{Unitary ESPRIT} در فضای پرتو \lr{DFT}}
+\label{sec:5-7}
+در این بخش، الگوریتم \lr{Unitary ESPRIT} بر روی آرایه‌های خطی یکنواخت در فضای پرتو \lr{DFT} اعمال می‌شود. یک ماتریس هدایت آرایه در فضای پرتو با مقادیر حقیقی\LTRfootnote{Real-valued beamspace array steering matrix} از طریق انتخاب نقطه مرجع در مرکز آرایه و اعمال تبدیل فضای پرتو به‌دست می‌آید. این تبدیل با مقادیر حقیقی منجر به کاهش قابل توجه در پیچیدگی محاسباتی شده و به‌راحتی به آرایه مستطیلی یکنواخت تعمیم می‌یابد \cite{5-9}.
+
+\subsection{\lr{Unitary ESPRIT} یک‌بعدی در فضای پرتو \lr{DFT}}
+\label{subsec:5-7-1}
+یک \lr{ULA} شامل $M$ عنصر با بیشترین هم‌پوشانی را در نظر بگیرید. مدل داده و سیگنال بحث‌شده در فصل \ref{chap:3} و یک فضای پرتو $L$-بعدی را فرض کنید. الگوریتم \lr{Unitary ESPRIT} در فضای پرتو \lr{DFT} را می‌توان در مراحل زیر فرمول‌بندی کرد.
+
+\subsubsection{تبدیل به فضای پرتو}
+\label{subsubsec:5-7-1-1}
+بردار داده در فضای عنصر $\bm{X}$ ابتدا به بردار داده در فضای پرتو $\bm{Y}$ تبدیل می‌شود:
+
+
+\begin{equation}
+	\bm{Y} = \bm{W}_b \bm{X}
+	\label{eq:5-83}
+\end{equation}
+تبدیل به فضای پرتو \lr{DFT} ($\bm{Y} = \bm{W}_b \bm{X} \in \mathbb{C}^{M \times N}$) می‌تواند با استفاده از یک \lr{FFT}\LTRfootnote{Fast Fourier Transform (FFT)} پیاده‌سازی شود که از ساختار وندرموند سطرهای ماتریس \lr{FFT} بهره می‌برد و پس از آن، مقیاس‌دهی مناسبی روی سطرهای ماتریس حاصل انجام می‌گردد.
+
+\subsubsection{تخمین زیرفضای سیگنال با مقادیر حقیقی}
+\label{subsubsec:5-7-1-2}
+اکنون تبدیل یکانی همان‌طور که در بخش \ref{sec:5-4} بحث شد، اعمال می‌گردد. یک \lr{SVD} از ماتریس با مقادیر حقیقی
+\begin{equation}
+	[\text{Re}\{\bm{Y}\} \quad \text{Im}\{\bm{Y}\}] \in \mathbb{R}^{L \times 2N} \quad \text{با} \quad \bm{Y} = \bm{W}_b^L \bm{X} \in \mathbb{C}^{L \times N}
+	\label{eq:5-84}
+\end{equation}
+برای تخمین $d$ بردار منفرد چپ که متناظر با $d$ بزرگ‌ترین مقدار منفرد رابطه \eqref{eq:5-84} هستند، محاسبه می‌شود؛ در غیر این صورت، یک \lr{EVD} از ماتریس
+\begin{equation}
+	\text{Re}\{\bm{Y}\} \text{Re}\{\bm{Y}\}^H + \text{Im}\{\bm{Y}\} \text{Im}\{\bm{Y}\}^H
+	\label{eq:5-85}
+\end{equation}
+نیز می‌تواند محاسبه شود (یعنی رویکرد کوواریانس). این تبدیل، همان‌طور که در بخش \ref{sec:5-4} توصیف شد، به‌طور خودکار میانگین‌گیری رفت‌وبرگشت را محقق می‌سازد.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
